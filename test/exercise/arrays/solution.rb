@@ -18,7 +18,21 @@ module Exercise
       end
 
       def search(_array, _query)
-        0
+        left = 0
+        right = _array.length - 1
+
+        while left <= right
+          middle = (left + right) / 2
+
+          if _array[middle] == _query
+            return middle
+          elsif _array[middle] < _query
+            left = middle + 1
+          else
+            right = middle - 1
+          end
+        end
+        -1
       end
     end
   end
