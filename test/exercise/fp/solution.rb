@@ -15,7 +15,15 @@ module Exercise
       end
 
       def chars_count(_films, _threshold)
-        0
+        _films
+          .map do |film|
+            name = film['name']
+            rating = film['rating_kinopoisk'].to_f
+            rating >= _threshold ? name : nil
+          end
+          .compact
+          .map { |name| name.count('и') }
+          .reduce(0, :+)  
       end
     end
   end
