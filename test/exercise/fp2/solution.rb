@@ -17,7 +17,15 @@ module Exercise
       end
 
       # Написать свою функцию my_map
-      def my_map; end
+      def my_map
+        return to_enum(:my_map) unless block_given?
+
+        result = []
+        my_each do |element|
+          result << yield(element)
+        end
+        MyArray.new(result)
+      end
 
       # Написать свою функцию my_compact
       def my_compact; end
