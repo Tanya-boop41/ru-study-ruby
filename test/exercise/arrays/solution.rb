@@ -13,7 +13,7 @@ module Exercise
 
       def replace(array)
         n = max_positive_numb(array) 
-        array.map! do |i|
+        array.map do |i|
           i > 0 && i < n ? n : i
         end
       end
