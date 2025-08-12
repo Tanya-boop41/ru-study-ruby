@@ -22,8 +22,11 @@ module Exercise
         return -1 if left > right
 
         middle = (left + right) / 2
-        array[middle] == query ? middle : (array[middle] < query ? search(array, query, middle + 1, right) : search(array, query, left, middle - 1))
-          
+        return middle if array[middle] == query
+
+        array[middle] < query ? 
+          search(array, query, middle + 1, right) : 
+          search(array, query, left, middle - 1)  
       end
     end
   end
