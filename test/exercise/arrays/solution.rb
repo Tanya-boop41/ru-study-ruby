@@ -2,13 +2,9 @@ module Exercise
   module Arrays
     class << self
       def max_positive_numb(array)
-        return nil if array.all?(&:negative?)
-        
-        max = 0
-        array.each do |i|
-          max = i if i > max
+        array.reduce(nil) do |max, i|
+          i > 0 && (max.nil? || i > max) ? i : max
         end
-        max
       end
 
       def replace(array)
