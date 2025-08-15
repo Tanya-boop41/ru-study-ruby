@@ -5,16 +5,53 @@ module Exercise
       # Использовать свои написанные функции для реализации следующих - можно.
 
       # Написать свою функцию my_each
-      def my_each; end
+      def my_each
+        return to_enum(:my_each) unless block_given?
+
+        index = 0
+        while index < self.length
+          yield self[index]
+          index += 1
+        end
+        self
+      end
 
       # Написать свою функцию my_map
-      def my_map; end
+      def my_map
+        return to_enum(:my_map) unless block_given?
+
+        result = []
+        my_each do |element|
+          result << yield(element)
+        end
+        MyArray.new(result)
+      end
 
       # Написать свою функцию my_compact
-      def my_compact; end
+      def my_compact
+        result = []
+        my_each do |element|
+          result << element unless element.nil?
+        end
+        MyArray.new(result)
+      end
 
       # Написать свою функцию my_reduce
-      def my_reduce; end
+      def my_reduce(initial = nil)
+        index = 0
+        acc = initial
+
+        if acc.nil?
+          acc = self[0]
+          index = 1
+        end
+        
+        while index < self.length
+          acc = yield(acc, self[index])
+          index += 1
+        end
+        acc  
+      end
     end
   end
 end
