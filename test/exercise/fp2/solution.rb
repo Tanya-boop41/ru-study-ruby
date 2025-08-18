@@ -5,14 +5,13 @@ module Exercise
       # Использовать свои написанные функции для реализации следующих - можно.
 
       # Написать свою функцию my_each
-      def my_each
+      def my_each(index = 0, &block)
         return to_enum(:my_each) unless block_given?
 
-        index = 0
-        while index < self.length
-          yield self[index]
-          index += 1
-        end
+        return self if index >= self.length
+
+        yield self[index]
+        my_each(index + 1, &block)
         self
       end
 
