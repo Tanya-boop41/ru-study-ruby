@@ -36,20 +36,19 @@ module Exercise
       end
 
       # Написать свою функцию my_reduce
-      def my_reduce(initial = nil)
-        index = 0
-        acc = initial
+      def my_reduce(initial = nil, index = 0, &block)
+        return nil if self.empty? && initial.nil?
 
-        if acc.nil?
-          acc = self[0]
+        if initial.nil? && index == 0
+          initial = self[0]
           index = 1
         end
         
-        while index < self.length
-          acc = yield(acc, self[index])
-          index += 1
-        end
-        acc  
+        return initial if index >= self.length
+
+        new_acc = block.call(initial, self[index])
+        
+        my_reduce(new_acc, index + 1, &block)  
       end
     end
   end
