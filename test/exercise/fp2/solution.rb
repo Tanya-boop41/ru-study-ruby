@@ -3,7 +3,9 @@ module Exercise
     class MyArray < Array
       # Использовать стандартные функции массива для решения задач нельзя.
       # Использовать свои написанные функции для реализации следующих - можно.
-
+      def initialize(array = [])
+        super(array)
+      end
       # Написать свою функцию my_each
       def my_each(index = 0, &block)
         return to_enum(:my_each) unless block_given?
@@ -16,21 +18,21 @@ module Exercise
       end
 
       # Написать свою функцию my_map
-      def my_map
+      def my_map(&block)
         return to_enum(:my_map) unless block_given?
 
-        result = []
-        my_each do |element|
-          result << yield(element)
+        result = my_reduce([]) do |acc, el|
+          acc << block.call(el)
+          acc
         end
         MyArray.new(result)
       end
 
       # Написать свою функцию my_compact
       def my_compact
-        result = []
-        my_each do |element|
-          result << element unless element.nil?
+        result = my_reduce([]) do |acc, el|
+          acc << el unless el.nil?
+          acc
         end
         MyArray.new(result)
       end
