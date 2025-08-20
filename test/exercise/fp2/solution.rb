@@ -7,21 +7,21 @@ module Exercise
         super(array)
       end
       # Написать свою функцию my_each
-      def my_each(index = 0, &block)
+      def my_each(&block)
         return to_enum(:my_each) unless block_given?
+        return MyArray.new(self) if empty?
 
-        return self if index >= self.length
+        yield first
+        MyArray.new(self[1..]).my_each(&block)
 
-        yield self[index]
-        my_each(index + 1, &block)
-        self
+        MyArray.new(self)
       end
 
       # Написать свою функцию my_map
       def my_map(&block)
         return to_enum(:my_map) unless block_given?
 
-        result = my_reduce([]) do |acc, el|
+        result = my_reduce(MyArray.new) do |acc, el|
           acc << block.call(el)
           acc
         end
@@ -30,7 +30,7 @@ module Exercise
 
       # Написать свою функцию my_compact
       def my_compact
-        result = my_reduce([]) do |acc, el|
+        result = my_reduce(MyArray.new) do |acc, el|
           acc << el unless el.nil?
           acc
         end
@@ -38,19 +38,18 @@ module Exercise
       end
 
       # Написать свою функцию my_reduce
-      def my_reduce(initial = nil, index = 0, &block)
-        return nil if self.empty? && initial.nil?
+      def my_reduce(acc = nil, &block)
+        return nil if empty? && acc.nil?
 
-        if initial.nil? && index == 0
-          initial = self[0]
-          index = 1
+        if acc.nil?
+          acc = first
+          return MyArray.new(self[1..]).my_reduce(acc, &block)
         end
         
-        return initial if index >= self.length
+        return acc if empty?
 
-        new_acc = block.call(initial, self[index])
-        
-        my_reduce(new_acc, index + 1, &block)  
+        new_acc = block.call(acc, first)
+        MyArray.new(self[1..]).my_reduce(new_acc, &block)  
       end
     end
   end
